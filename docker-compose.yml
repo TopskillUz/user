@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  user:
+    container_name: user
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: user:latest
+    volumes:
+      - .:/service
+    networks:
+      - gateway_microservices
+    restart: always
+
+networks:
+  gateway_microservices:
+    external: true
