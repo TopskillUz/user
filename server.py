@@ -3,9 +3,7 @@ from concurrent import futures
 from google.protobuf.wrappers_pb2 import BoolValue
 import grpc
 
-import auth_pb2_grpc
-
-import auth_pb2
+from grpc_generated_files import auth_pb2_grpc, auth_pb2
 
 
 class AuthServicer(auth_pb2_grpc.AuthServiceServicer):
@@ -19,9 +17,10 @@ class AuthServicer(auth_pb2_grpc.AuthServiceServicer):
 
 
 def serve():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     auth_pb2_grpc.add_AuthServiceServicer_to_server(AuthServicer(), server)
-    server.add_insecure_port(f"[::]:9998")
+    print('Starting server. Listening on port 9998.')
+    server.add_insecure_port("[::]:9998")
     server.start()
     server.wait_for_termination()
 

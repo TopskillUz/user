@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: user
+          image: user:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 9998
+          envFrom:
+            - configMapRef:
+                name: user-configmap
+            - secretRef:
+                name: user-secret
+#          livenessProbe:
+#            exec:
+#              command: [ "/bin/grpc_health_probe", "-addr=:9998", "-connect-timeout=100ms", "-rpc-timeout=150ms" ]
+#            initialDelaySeconds: 5
+      restartPolicy: Always

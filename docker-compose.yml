@@ -9,9 +9,9 @@ services:
     volumes:
       - .:/service
     networks:
-      - gateway_microservices
+      - microservices
     restart: always
 
 networks:
-  gateway_microservices:
+  microservices:
     external: true
